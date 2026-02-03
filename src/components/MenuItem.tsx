@@ -10,9 +10,10 @@ import Image from 'next/image';
 interface MenuItemProps {
   item: MenuItemType;
   index: number;
+  onSelect: (item: MenuItemType) => void;
 }
 
-export default function MenuItem({ item, index }: MenuItemProps) {
+export default function MenuItem({ item, index, onSelect }: MenuItemProps) {
   const { addItem, items } = useCartStore();
   const [isAdding, setIsAdding] = useState(false);
   
@@ -35,10 +36,11 @@ export default function MenuItem({ item, index }: MenuItemProps) {
 
   return (
     <div
+      onClick={() => onSelect(item)}
       className={`
         group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl
-        border border-[var(--border)] card-hover animate-fade-in
-        ${!item.available ? 'opacity-60' : ''}
+        border border-[var(--border)] card-hover animate-fade-in cursor-pointer
+        ${!item.available ? 'opacity-60 grayscale' : ''}
       `}
       style={{ animationDelay: `${index * 50}ms` }}
     >
@@ -102,7 +104,10 @@ export default function MenuItem({ item, index }: MenuItemProps) {
           </div>
           
           <button
-            onClick={handleAddToCart}
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent opening modal when clicking button
+              handleAddToCart();
+            }}
             disabled={!item.available || isAdding}
             className={`
               flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm

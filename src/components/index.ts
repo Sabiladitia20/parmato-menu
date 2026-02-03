@@ -5,3 +5,5 @@ export { default as MenuItem } from './MenuItem';
 export { default as MenuGrid } from './MenuGrid';
 export { default as CartSidebar } from './CartSidebar';
 export { default as CheckoutModal } from './CheckoutModal';
+export { default as MenuDetailModal } from './MenuDetailModal';
+export { default as OrderHistoryModal } from './OrderHistoryModal';

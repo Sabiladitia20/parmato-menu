@@ -2,10 +2,10 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Header, Hero, CategoryNav, MenuGrid, CartSidebar } from '@/components';
+import { Header, Hero, CategoryNav, MenuGrid, CartSidebar, MenuDetailModal } from '@/components';
 import OrderHistoryModal from '@/components/OrderHistoryModal';
 import { getCategories } from '@/lib/supabase-service';
-import { Category, CategoryInfo } from '@/types';
+import { Category, CategoryInfo, MenuItem as MenuItemType } from '@/types';
 import { useTableStore } from '@/store/tableStore';
 import { useOrderHistoryStore } from '@/store/orderHistoryStore';
 import { Receipt } from 'lucide-react';
@@ -29,6 +29,7 @@ export default function Home() {
   const [activeCategory, setActiveCategory] = useState<Category>('');
   const [categories, setCategories] = useState<CategoryInfo[]>([]);
   const [showOrderHistory, setShowOrderHistory] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<MenuItemType | null>(null);
   const { orderIds } = useOrderHistoryStore();
 
   useEffect(() => {
@@ -50,6 +51,11 @@ export default function Home() {
       <Header />
       <CartSidebar />
       <OrderHistoryModal isOpen={showOrderHistory} onClose={() => setShowOrderHistory(false)} />
+      <MenuDetailModal 
+        item={selectedItem} 
+        isOpen={!!selectedItem} 
+        onClose={() => setSelectedItem(null)} 
+      />
       
       {/* Floating Order History Button */}
       {orderIds.length > 0 && (
@@ -77,7 +83,12 @@ export default function Home() {
             onCategoryChange={setActiveCategory}
             categories={categories}
           />
-          {activeCategory && <MenuGrid category={activeCategory} />}
+          {activeCategory && (
+            <MenuGrid 
+              category={activeCategory} 
+              onSelectItem={setSelectedItem} 
+            />
+          )}
         </section>
 
         {/* About Section */}

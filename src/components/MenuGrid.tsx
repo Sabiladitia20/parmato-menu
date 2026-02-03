@@ -6,9 +6,10 @@ import { Loader2 } from 'lucide-react';
 
 interface MenuGridProps {
   category: Category;
+  onSelectItem: (item: MenuItemType) => void;
 }
 
-export default function MenuGrid({ category }: MenuGridProps) {
+export default function MenuGrid({ category, onSelectItem }: MenuGridProps) {
   const [categoryInfo, setCategoryInfo] = useState<{label: string, emoji: string} | null>(null);
   const [items, setItems] = useState<MenuItemType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -100,7 +101,12 @@ export default function MenuGrid({ category }: MenuGridProps) {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {items.map((item, index) => (
-              <MenuItem key={item.id} item={item} index={index} />
+              <MenuItem 
+                key={item.id} 
+                item={item} 
+                index={index} 
+                onSelect={onSelectItem}
+              />
             ))}
           </div>
         )}
