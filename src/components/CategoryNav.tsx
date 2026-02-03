@@ -16,7 +16,7 @@ export default function CategoryNav({
   return (
     <nav className="sticky top-[72px] z-40 bg-[var(--bg-cream)] py-4 border-b border-[var(--border)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        <div className="flex gap-3 overflow-x-auto py-4 scrollbar-hide px-1">
           {categories.map((category) => {
             const isActive = activeCategory === category.id;
             return (

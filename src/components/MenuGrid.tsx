@@ -66,7 +66,7 @@ export default function MenuGrid({ category, onSelectItem }: MenuGridProps) {
 
   return (
     <section className="py-6 sm:py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12">
         {/* Section Header */}
         <div className="mb-6">
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-[var(--text-dark)]">
