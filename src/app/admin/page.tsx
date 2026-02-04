@@ -331,9 +331,16 @@ export default function AdminDashboard() {
                   {/* Order Items */}
                   <div className="bg-gray-50 rounded-xl p-4 mb-4">
                     {order.order_items?.map((item: OrderItem, idx: number) => (
-                      <div key={idx} className="flex justify-between py-2 border-b border-gray-200 last:border-0">
-                        <span className="text-gray-700">{item.quantity}x {item.menu_item?.name || 'Unknown'}</span>
-                        <span className="text-gray-500">{formatPrice(item.price_at_order * item.quantity)}</span>
+                      <div key={idx} className="flex flex-col py-2 border-b border-gray-200 last:border-0">
+                        <div className="flex justify-between w-full">
+                          <span className="text-gray-700 font-medium">{item.quantity}x {item.menu_item?.name || 'Unknown'}</span>
+                          <span className="text-gray-500">{formatPrice(item.price_at_order * item.quantity)}</span>
+                        </div>
+                        {item.notes && (
+                          <span className="text-xs text-orange-600 mt-1 italic">
+                            Catatan: {item.notes}
+                          </span>
+                        )}
                       </div>
                     ))}
                   </div>

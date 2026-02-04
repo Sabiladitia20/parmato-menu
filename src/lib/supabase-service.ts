@@ -212,6 +212,7 @@ export interface OrderItem {
   menu_item_id: number;
   quantity: number;
   price_at_order: number;
+  notes?: string;
   menu_item?: {
     name: string;
     category_id: string;
@@ -240,6 +241,7 @@ export async function getOrders(): Promise<Order[]> {
         menu_item_id,
         quantity,
         price_at_order,
+        notes,
         menu_items (
           name,
           category_id
@@ -256,11 +258,12 @@ export async function getOrders(): Promise<Order[]> {
   // Transform data to flatten menu_items inside order_items
   return data.map((order) => ({
     ...order,
-    order_items: order.order_items?.map((item: { id: number; menu_item_id: number; quantity: number; price_at_order: number; menu_items: { name: string; category_id: string } }) => ({
+    order_items: order.order_items?.map((item: { id: number; menu_item_id: number; quantity: number; price_at_order: number; notes?: string; menu_items: { name: string; category_id: string } }) => ({
       id: item.id,
       menu_item_id: item.menu_item_id,
       quantity: item.quantity,
       price_at_order: item.price_at_order,
+      notes: item.notes,
       menu_item: item.menu_items,
     })),
   }));
@@ -276,6 +279,7 @@ export async function getOrderById(id: string): Promise<Order | null> {
         menu_item_id,
         quantity,
         price_at_order,
+        notes,
         menu_items (
           name,
           category_id
@@ -292,11 +296,12 @@ export async function getOrderById(id: string): Promise<Order | null> {
 
   return {
     ...data,
-    order_items: data.order_items?.map((item: { id: number; menu_item_id: number; quantity: number; price_at_order: number; menu_items: { name: string; category_id: string } }) => ({
+    order_items: data.order_items?.map((item: { id: number; menu_item_id: number; quantity: number; price_at_order: number; notes?: string; menu_items: { name: string; category_id: string } }) => ({
       id: item.id,
       menu_item_id: item.menu_item_id,
       quantity: item.quantity,
       price_at_order: item.price_at_order,
+      notes: item.notes,
       menu_item: item.menu_items,
     })),
   };
@@ -312,6 +317,7 @@ export async function getOrdersByStatus(status: string): Promise<Order[]> {
         menu_item_id,
         quantity,
         price_at_order,
+        notes,
         menu_items (
           name,
           category_id
@@ -328,11 +334,12 @@ export async function getOrdersByStatus(status: string): Promise<Order[]> {
 
   return data.map((order) => ({
     ...order,
-    order_items: order.order_items?.map((item: { id: number; menu_item_id: number; quantity: number; price_at_order: number; menu_items: { name: string; category_id: string } }) => ({
+    order_items: order.order_items?.map((item: { id: number; menu_item_id: number; quantity: number; price_at_order: number; notes?: string; menu_items: { name: string; category_id: string } }) => ({
       id: item.id,
       menu_item_id: item.menu_item_id,
       quantity: item.quantity,
       price_at_order: item.price_at_order,
+      notes: item.notes,
       menu_item: item.menu_items,
     })),
   }));
