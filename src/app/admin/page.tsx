@@ -195,6 +195,15 @@ export default function AdminDashboard() {
                 <span>{item.label}</span>
               </button>
             ))}
+            
+            <a
+              href="/qr"
+              target="_blank"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-gray-600 hover:bg-gray-50 hover:text-gray-800"
+            >
+              <span className="text-xl">📱</span>
+              <span>Generator QR</span>
+            </a>
           </nav>
         </div>
 
