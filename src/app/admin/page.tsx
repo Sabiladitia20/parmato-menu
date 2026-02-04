@@ -336,10 +336,14 @@ export default function AdminDashboard() {
                           <span className="text-gray-700 font-medium">{item.quantity}x {item.menu_item?.name || 'Unknown'}</span>
                           <span className="text-gray-500">{formatPrice(item.price_at_order * item.quantity)}</span>
                         </div>
-                        {item.notes && (
-                          <span className="text-xs text-orange-600 mt-1 italic">
-                            Catatan: {item.notes}
-                          </span>
+                        {/* More robust note check */}
+                        {(item.notes && item.notes.trim() !== "") && (
+                          <div className="mt-2 flex items-start gap-1.5 bg-orange-50 p-2 rounded-lg border border-orange-100">
+                            <span className="text-sm">📝</span>
+                            <span className="text-xs text-orange-700 font-medium italic">
+                              Catatan: {item.notes}
+                            </span>
+                          </div>
                         )}
                       </div>
                     ))}
