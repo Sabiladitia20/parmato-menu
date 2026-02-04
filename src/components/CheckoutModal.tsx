@@ -83,7 +83,8 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         order_id: orderData.id,
         menu_item_id: item.id,
         quantity: item.quantity,
-        price_at_order: item.price
+        price_at_order: item.price,
+        notes: item.notes || ''
       }));
 
       const { error: itemsError } = await supabase

@@ -50,6 +50,7 @@
     menu_item_id INTEGER REFERENCES menu_items(id),
     quantity INTEGER NOT NULL,
     price_at_order INTEGER NOT NULL,
+    notes TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
   );
 
