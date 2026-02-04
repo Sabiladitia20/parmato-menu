@@ -95,6 +95,11 @@ export default function CartSidebar() {
                     <h4 className="font-semibold text-[var(--text-dark)] truncate">
                       {item.name}
                     </h4>
+                    {item.notes && (
+                      <p className="text-xs text-[var(--text-muted)] italic mb-1 truncate">
+                        "{item.notes}"
+                      </p>
+                    )}
                     <p className="text-[var(--primary-red)] font-bold">
                       {formatPrice(item.price)}
                     </p>
@@ -103,7 +108,7 @@ export default function CartSidebar() {
                     <div className="flex items-center justify-between mt-2">
                       <div className="flex items-center gap-2">
                         <button
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          onClick={() => updateQuantity(item.id, item.quantity - 1, item.notes)}
                           className="w-8 h-8 bg-white rounded-lg flex items-center justify-center hover:bg-[var(--bg-warm)] transition-colors border border-[var(--border)]"
                           aria-label={`Kurangi ${item.name}`}
                         >
@@ -113,7 +118,7 @@ export default function CartSidebar() {
                           {item.quantity}
                         </span>
                         <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.id, item.quantity + 1, item.notes)}
                           className="w-8 h-8 bg-white rounded-lg flex items-center justify-center hover:bg-[var(--bg-warm)] transition-colors border border-[var(--border)]"
                           aria-label={`Tambah ${item.name}`}
                         >
@@ -123,7 +128,7 @@ export default function CartSidebar() {
 
                       {/* Remove Button */}
                       <button
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => removeItem(item.id, item.notes)}
                         className="p-2 text-[var(--text-light)] hover:text-[var(--error)] hover:bg-red-50 rounded-lg transition-colors"
                         aria-label={`Hapus ${item.name}`}
                       >

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useOrderHistoryStore } from '@/store/orderHistoryStore';
 import { getOrderById, Order } from '@/lib/supabase-service';
 import { formatPrice } from '@/data/menuData';
+import { supabase } from '@/lib/supabase';
 
 interface OrderHistoryModalProps {
   isOpen: boolean;
@@ -19,9 +20,31 @@ export default function OrderHistoryModal({ isOpen, onClose }: OrderHistoryModal
   useEffect(() => {
     if (isOpen) {
       loadOrders();
-      // Set up polling for real-time updates
-      const interval = setInterval(loadOrders, 5000); // Refresh every 5 seconds
-      return () => clearInterval(interval);
+
+      // Set up real-time subscription for order status updates
+      const channel = supabase
+        .channel('order-updates')
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'orders',
+          },
+          (payload) => {
+            const updatedOrder = payload.new as Order;
+            if (orderIds.includes(updatedOrder.id)) {
+              setOrders((current) =>
+                current.map((o) => (o.id === updatedOrder.id ? { ...o, ...updatedOrder } : o))
+              );
+            }
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
     }
   }, [isOpen, orderIds]);
 

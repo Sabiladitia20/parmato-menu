@@ -16,30 +16,28 @@ interface MenuDetailModalProps {
 export default function MenuDetailModal({ item, isOpen, onClose }: MenuDetailModalProps) {
   const { addItem, updateQuantity, items } = useCartStore();
   const [quantity, setQuantity] = useState(1);
+  const [notes, setNotes] = useState('');
   const [isAdding, setIsAdding] = useState(false);
 
   if (!item || !isOpen) return null;
 
-  const cartItem = items.find((i) => i.id === item.id);
-  const isInCart = !!cartItem;
-
   const handleAddToCart = () => {
     setIsAdding(true);
-    // If already in cart, we can either add more or set to specific quantity
-    // Let's make it add the selected quantity
-    for (let i = 0; i < quantity; i++) {
-        addItem({
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          category: item.category,
-        });
-    }
+    
+    addItem({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      category: item.category,
+      quantity,
+      notes: notes.trim(),
+    });
     
     setTimeout(() => {
       setIsAdding(false);
       onClose();
       setQuantity(1);
+      setNotes('');
     }, 600);
   };
 
@@ -96,9 +94,27 @@ export default function MenuDetailModal({ item, isOpen, onClose }: MenuDetailMod
               </span>
             </div>
 
-            <p className="text-lg text-[var(--text-muted)] mb-8 leading-relaxed">
+            <p className="text-lg text-[var(--text-muted)] mb-6 leading-relaxed">
               {item.description}
             </p>
+
+            {/* Notes Field */}
+            <div className="mb-8">
+              <label 
+                htmlFor="notes" 
+                className="block text-sm font-semibold text-[var(--text-dark)] mb-2"
+              >
+                Catatan Khusus (opsional)
+              </label>
+              <textarea
+                id="notes"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Contoh: Tanpa sambal, Ekstra bumbu, dll."
+                className="w-full px-4 py-3 rounded-2xl bg-[var(--bg-light)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-red)]/20 focus:border-[var(--primary-red)] transition-all resize-none text-[var(--text-body)]"
+                rows={2}
+              />
+            </div>
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row items-center gap-6">

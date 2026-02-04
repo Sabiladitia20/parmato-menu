@@ -5,9 +5,9 @@ import { CartItem } from '@/types';
 interface CartStore {
   items: CartItem[];
   isOpen: boolean;
-  addItem: (item: Omit<CartItem, 'quantity'>) => void;
-  removeItem: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
+  addItem: (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => void;
+  removeItem: (id: number, notes?: string) => void;
+  updateQuantity: (id: number, quantity: number, notes?: string) => void;
   clearCart: () => void;
   getTotal: () => number;
   getItemCount: () => number;
@@ -24,30 +24,43 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (item) => {
         const items = get().items;
-        const existingItem = items.find((i) => i.id === item.id);
+        const qtyToAdd = item.quantity || 1;
+        // Check if item with same ID AND same notes already exists
+        const existingItemIndex = items.findIndex(
+          (i) => i.id === item.id && i.notes === item.notes
+        );
 
-        if (existingItem) {
-          set({
-            items: items.map((i) =>
-              i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-            ),
-          });
+        if (existingItemIndex > -1) {
+          const updatedItems = [...items];
+          updatedItems[existingItemIndex] = {
+            ...updatedItems[existingItemIndex],
+            quantity: updatedItems[existingItemIndex].quantity + qtyToAdd,
+          };
+          set({ items: updatedItems });
         } else {
-          set({ items: [...items, { ...item, quantity: 1 }] });
+          set({ 
+            items: [...items, { 
+              ...item, 
+              quantity: qtyToAdd,
+              notes: item.notes || '' // Ensure notes is at least empty string
+            }] 
+          });
         }
       },
 
-      removeItem: (id) => {
-        set({ items: get().items.filter((i) => i.id !== id) });
+      removeItem: (id, notes) => {
+        set({ 
+          items: get().items.filter((i) => !(i.id === id && i.notes === notes)) 
+        });
       },
-
-      updateQuantity: (id, quantity) => {
+      
+      updateQuantity: (id, quantity, notes) => {
         if (quantity <= 0) {
-          get().removeItem(id);
+          get().removeItem(id, notes);
         } else {
           set({
             items: get().items.map((i) =>
-              i.id === id ? { ...i, quantity } : i
+              i.id === id && i.notes === notes ? { ...i, quantity } : i
             ),
           });
         }
